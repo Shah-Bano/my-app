@@ -13,6 +13,31 @@ export default function WorldMap() {
 
   return (
     <div style={{ position: "relative" }}>
+      {/* Inline style tag for pulsing animation */}
+      <style>{`
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.03);
+            opacity: 0.85;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        .pulsing {
+          animation: pulse 1s infinite ease-in-out;
+          transform-box: fill-box;
+          transform-origin: center;
+          filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+        }
+      `}</style>
+
       <svg
         viewBox="0 0 2000 857"
         width="100%"
@@ -22,15 +47,16 @@ export default function WorldMap() {
         <defs>
           <pattern
             id="afghanistanPattern"
-            patternUnits="objectBoundingBox"
-            patternContentUnits="objectBoundingBox"
-            width="1"
-            height="1"
+            patternUnits="userSpaceOnUse"
+            width="500"
+            height="500"
           >
             <image
               href={`${process.env.PUBLIC_URL}/images/single.jpg`}
-              width="1"
-              height="1"
+              x="0"
+              y="0"
+              width="500"
+              height="500"
               preserveAspectRatio="xMidYMid slice"
             />
           </pattern>
@@ -45,6 +71,7 @@ export default function WorldMap() {
           strokeWidth={0.2}
           onMouseEnter={() => handleMouseEnter("AF", "Afghanistan")}
           onMouseLeave={handleMouseLeave}
+          className={hoveredCountry?.id === "AF" ? "pulsing" : ""}
           style={{
             cursor: "pointer",
             transition: "all 0.3s ease",
