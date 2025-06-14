@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 
+const countryImages = {
+  AF: "/images/afghanistan.jpg",
+  // Add other countries here, e.g.:
+  // AL: "/images/albania.jpg",
+  // AE: "/images/uae.jpg",
+  // etc.
+};
+
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
 
@@ -14,7 +22,6 @@ export default function WorldMap() {
   return (
     <div style={{ position: "relative" }}>
       <svg
-        // your SVG props here
         viewBox="0 0 2000 857"
         width="100%"
         height="auto"
@@ -29,11 +36,10 @@ export default function WorldMap() {
           strokeWidth={0.2}
           onMouseEnter={() => handleMouseEnter("AF", "Afghanistan")}
           onMouseLeave={handleMouseLeave}
-          style={{ cursor: "pointer"}}
-          // simple hover scale effect:
+          style={{ cursor: "pointer" }}
           transform={hoveredCountry?.id === "AF" ? "scale(1.1)" : "scale(1)"}
         />
-        {/* Repeat for other countries */}
+        {/* Add more countries similarly */}
       </svg>
 
       {hoveredCountry && (
@@ -46,10 +52,19 @@ export default function WorldMap() {
             padding: "8px",
             border: "1px solid black",
             pointerEvents: "none",
+            width: "150px",
           }}
         >
           <strong>{hoveredCountry.name}</strong>
           <div>Menu items or dishes here...</div>
+
+          {countryImages[hoveredCountry.id] && (
+            <img
+              src={countryImages[hoveredCountry.id]}
+              alt={hoveredCountry.name}
+              style={{ width: "100%", marginTop: "8px", borderRadius: "4px" }}
+            />
+          )}
         </div>
       )}
     </div>
