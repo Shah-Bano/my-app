@@ -28,7 +28,7 @@ export default function WorldMap() {
             height="100"
           >
             <image
-              href="/images/afghanistan.jpg" // Image path in public folder
+              href="/images/single.jpg" // Image path in public folder
               x="0"
               y="0"
               width="200"
