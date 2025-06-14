@@ -29,7 +29,7 @@ export default function WorldMap() {
           strokeWidth={0.2}
           onMouseEnter={() => handleMouseEnter("AF", "Afghanistan")}
           onMouseLeave={handleMouseLeave}
-          style={{ cursor: "pointer", transition: "transform 0.2s" }}
+          style={{ cursor: "pointer"}}
           // simple hover scale effect:
           transform={hoveredCountry?.id === "AF" ? "scale(1.1)" : "scale(1)"}
         />
