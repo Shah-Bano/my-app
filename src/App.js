@@ -193,39 +193,14 @@ export default function WorldMap() {
             <div className="font-bold text-lg text-gray-800 mb-2">
               {hoveredCountry.name}
             </div>
-            <div className="text-sm text-gray-600 mb-2">Traditional Dishes:</div>
-            <div className="space-y-1">
-              {(countryMenus[hoveredCountry.id] || ["No data available"]).map((dish, index) => (
-                <div key={index} className="text-sm bg-blue-50 px-2 py-1 rounded">
-                  • {dish}
-                </div>
-              ))}
-            </div>
-            <div className="text-xs text-gray-500 mt-2">Click to select</div>
+            
           </div>
         )}
       </div>
 
 
 
-      {/* Legend */}
-      <div className="mt-6 bg-white rounded-lg shadow-lg p-4">
-        <h3 className="text-lg font-semibold mb-3 text-gray-800">Map Legend</h3>
-        <div className="flex flex-wrap gap-4 text-sm">
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-blue-500 rounded"></div>
-            <span>Interactive Countries</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-gray-300 rounded"></div>
-            <span>Other Countries</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-blue-100 rounded"></div>
-            <span>Ocean</span>
-          </div>
-        </div>
-      </div>
+     
     </div>
   );
 }
