@@ -22,16 +22,15 @@ export default function WorldMap() {
         <defs>
           <pattern
             id="afghanistanPattern"
-            patternUnits="userSpaceOnUse"
-            width="500"
-            height="500"
+            patternUnits="objectBoundingBox"
+            patternContentUnits="objectBoundingBox"
+            width="1"
+            height="1"
           >
             <image
               href={`${process.env.PUBLIC_URL}/images/single.jpg`}
-              x="0"
-              y="0"
-              width="500"
-              height="500"
+              width="1"
+              height="1"
               preserveAspectRatio="xMidYMid slice"
             />
           </pattern>
