@@ -1,153 +1,122 @@
-import React, { useEffect, useState } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-
-const countries = [
-  { id: "CN", name: "China", image: "1.png" },
-  { id: "GB", name: "Britain", image: "2.png" },
-  { id: "BE", name: "Belgium", image: "3.png" },
-  { id: "FR", name: "France", image: "4.png" },
-  { id: "LB", name: "Lebanon", image: "5.png" },
-  { id: "PS", name: "Palestine", image: "6.png" },
-  { id: "SA", name: "Saudi Arabia", image: "7.png" },
-  { id: "YE", name: "Yemen", image: "8.png" },
-  { id: "PK", name: "Pakistan", image: "9.png" },
-  { id: "IN", name: "India", image: "10.png" },
-  { id: "EG", name: "Egypt", image: "11.png" },
-  { id: "IR", name: "Iran", image: "12.png" },
-  { id: "TR", name: "Turkey", image: "13.png" },
-  { id: "AF", name: "Afghanistan", image: "14.png" },
-];
-
-const countryMenus = {
-  CN: ["Kung Pao Chicken", "Peking Duck", "Sweet & Sour Pork", "Fried Rice"],
-  GB: ["Fish & Chips", "Bangers & Mash", "Shepherd's Pie", "Beef Wellington"],
-  BE: ["Moules-frites", "Belgian Waffles", "Carbonnade Flamande", "Speculoos"],
-  FR: ["Coq au Vin", "Ratatouille", "Bouillabaisse", "Crème Brûlée"],
-  LB: ["Hummus", "Tabbouleh", "Fattoush", "Kibbeh"],
-  PS: ["Musakhan", "Knafeh", "Maqluba", "Za'atar Bread"],
-  SA: ["Kabsa", "Shawarma", "Mutabbaq", "Qursan"],
-  YE: ["Saltah", "Fahsa", "Bint al-Sahn", "Zurbian"],
-  PK: ["Biryani", "Karahi", "Nihari", "Chapli Kebab"],
-  IN: ["Butter Chicken", "Biryani", "Masala Dosa", "Samosa"],
-  EG: ["Koshari", "Ful Medames", "Molokhia", "Baklava"],
-  IR: ["Kebab", "Ghormeh Sabzi", "Fesenjan", "Tahdig"],
-  TR: ["Kebab", "Baklava", "Turkish Delight", "Pide"],
-  AF: ["Kabuli Pulao", "Mantu", "Ashak", "Bolani"],
-};
+import React, { useState, useEffect } from "react";
+import * as d3 from "d3";
 
 export default function WorldMap() {
-  const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState(null);
   const [geoData, setGeoData] = useState(null);
-
-  const interactiveCountryIDs = countries.map((c) => c.id);
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    fetch("/custom.geo.json")
-      .then((res) => res.json())
-      .then((data) => setGeoData(data));
+    d3.json("/custom.geo.json").then((data) => {
+      setGeoData(data);
+    });
   }, []);
 
-  if (!geoData) return <div>Loading map...</div>;
+  const handleMouseEnter = (feature) => {
+    setHoveredCountry(feature);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredCountry(null);
+  };
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleCountryClick = (feature) => {
+    setSelectedCountry(selectedCountry?.id === feature.id ? null : feature);
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Interactive World Cuisine Map</h1>
+    <div className="w-full bg-gradient-to-b from-blue-50 to-blue-100 p-4 rounded-lg">
+      <div className="text-center mb-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Interactive World Cuisine Map</h1>
+        <p className="text-gray-600">Hover over countries to see more info</p>
+      </div>
 
-      <ComposableMap projection="geoMercator" width={1000} height={500}>
-        <Geographies geography={geoData}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const id = geo.properties.ISO_A2;
-              const name = geo.properties.ADMIN;
-              const isInteractive = interactiveCountryIDs.includes(id);
+      <div
+        className="relative bg-white rounded-lg shadow-lg overflow-hidden"
+        onMouseMove={handleMouseMove}
+      >
+        <svg
+          viewBox="0 0 2000 857"
+          width="100%"
+          height="auto"
+          xmlns="http://www.w3.org/2000/svg"
+          className="border border-gray-200"
+        >
+          <rect width="2000" height="857" fill="#dbeafe" />
+
+          {geoData &&
+            geoData.features.map((feature, index) => {
+              const { name } = feature.properties;
+              const path = d3.geoPath().projection(
+                d3.geoMercator()
+                  .scale(300)
+                  .translate([1000, 450])
+              );
 
               return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  onMouseEnter={() =>
-                    isInteractive && setHovered({ id, name })
-                  }
-                  onMouseLeave={() => setHovered(null)}
-                  onClick={() =>
-                    isInteractive &&
-                    setSelected(
-                      selected?.id === id ? null : { id, name }
-                    )
-                  }
+                <path
+                  key={index}
+                  d={path(feature)}
                   fill={
-                    selected?.id === id
-                      ? "#34d399"
-                      : hovered?.id === id
+                    hoveredCountry?.properties.name === name
                       ? "#60a5fa"
-                      : isInteractive
-                      ? "#3b82f6"
-                      : "#e5e7eb"
+                      : selectedCountry?.properties.name === name
+                      ? "#34d399"
+                      : "#3b82f6"
                   }
                   stroke="#374151"
                   strokeWidth={0.5}
-                  style={{
-                    default: {
-                      outline: "none",
-                      cursor: isInteractive ? "pointer" : "default",
-                    },
-                    hover: {
-                      fill: isInteractive ? "#60a5fa" : "#e5e7eb",
-                      outline: "none",
-                    },
-                    pressed: {
-                      fill: "#34d399",
-                      outline: "none",
-                    },
-                  }}
+                  onMouseEnter={() => handleMouseEnter(feature)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={() => handleCountryClick(feature)}
+                  className={`transition-all duration-300 cursor-pointer`}
                 />
               );
-            })
-          }
-        </Geographies>
-      </ComposableMap>
+            })}
+        </svg>
 
-      {hovered && (
-        <div className="mt-4 p-4 bg-white border shadow max-w-md rounded">
-          <h2 className="text-lg font-bold mb-2">{hovered.name}</h2>
-          <p className="text-sm text-gray-600">Hovering over this country.</p>
-        </div>
-      )}
+        {/* Tooltip */}
+        {hoveredCountry && (
+          <div
+            className="absolute bg-white border border-gray-300 rounded-lg shadow-lg p-3 pointer-events-none z-10 max-w-xs"
+            style={{
+              top: mousePosition.y + 10,
+              left: mousePosition.x + 10,
+            }}
+          >
+            <div className="font-bold text-lg text-gray-800 mb-2">
+              {hoveredCountry.properties.name}
+            </div>
+            <div className="text-sm text-gray-600">
+              ISO Code: {hoveredCountry.properties.iso_a2}
+            </div>
+          </div>
+        )}
+      </div>
 
-      {selected && (
-        <div className="mt-6 bg-white border border-green-200 shadow-lg p-6 rounded-lg">
+      {/* Selected Country Info */}
+      {selectedCountry && (
+        <div className="mt-6 bg-white rounded-lg shadow-lg p-6 border border-green-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800">
-              {selected.name} Cuisine
+            <h2 className="text-2xl font-bold text-gray-800">
+              {selectedCountry.properties.name} Selected
             </h2>
             <button
-              onClick={() => setSelected(null)}
-              className="text-gray-500 hover:text-gray-700 text-xl"
+              onClick={() => setSelectedCountry(null)}
+              className="text-gray-500 hover:text-gray-700 text-xl font-bold"
             >
               ×
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 className="font-semibold text-green-700 mb-2">
-                Popular Dishes
-              </h3>
-              <ul className="space-y-1 text-gray-700">
-                {(countryMenus[selected.id] || []).map((dish, idx) => (
-                  <li key={idx}>• {dish}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-green-700 mb-2">Flag</h3>
-              <img
-                src={`/${countries.find((c) => c.id === selected.id)?.image}`}
-                alt={`${selected.name} flag`}
-                className="w-28 border rounded shadow"
-              />
-            </div>
-          </div>
+          <p className="text-gray-600">
+            More information can go here, like cultural facts, dishes, or links.
+          </p>
         </div>
       )}
     </div>
