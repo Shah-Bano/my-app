@@ -1,13 +1,5 @@
 import React, { useState } from "react";
 
-const countryImages = {
-  AF: "/images/afghanistan.jpg",
-  // Add other countries here, e.g.:
-  // AL: "/images/albania.jpg",
-  // AE: "/images/uae.jpg",
-  // etc.
-};
-
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
 
@@ -27,11 +19,30 @@ export default function WorldMap() {
         height="auto"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <defs>
+          {/* Define a pattern with an image to use as fill */}
+          <pattern
+            id="afghanistanPattern"
+            patternUnits="userSpaceOnUse"
+            width="200"
+            height="100"
+          >
+            <image
+              href="/images/afghanistan.jpg" // Image path in public folder
+              x="0"
+              y="0"
+              width="200"
+              height="100"
+              preserveAspectRatio="xMidYMid slice"
+            />
+          </pattern>
+        </defs>
+
         <path
           id="AF"
           name="Afghanistan"
           d="M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z"
-          fill="#000000"
+          fill="url(#afghanistanPattern)" // Fill with the pattern
           stroke="black"
           strokeWidth={0.2}
           onMouseEnter={() => handleMouseEnter("AF", "Afghanistan")}
@@ -39,7 +50,7 @@ export default function WorldMap() {
           style={{ cursor: "pointer" }}
           transform={hoveredCountry?.id === "AF" ? "scale(1.1)" : "scale(1)"}
         />
-        {/* Add more countries similarly */}
+        {/* Add other countries with similar pattern fills */}
       </svg>
 
       {hoveredCountry && (
@@ -52,19 +63,10 @@ export default function WorldMap() {
             padding: "8px",
             border: "1px solid black",
             pointerEvents: "none",
-            width: "150px",
           }}
         >
           <strong>{hoveredCountry.name}</strong>
           <div>Menu items or dishes here...</div>
-
-          {countryImages[hoveredCountry.id] && (
-            <img
-              src={countryImages[hoveredCountry.id]}
-              alt={hoveredCountry.name}
-              style={{ width: "100%", marginTop: "8px", borderRadius: "4px" }}
-            />
-          )}
         </div>
       )}
     </div>
