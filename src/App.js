@@ -27,8 +27,7 @@ export default function WorldMap() {
             height="500"
           >
             <image
-              xlinkHref="images/single.jpg"
-              href="images/single.jpg"
+              href={`${process.env.PUBLIC_URL}/images/single.jpg`}
               x="0"
               y="0"
               width="500"
@@ -49,11 +48,9 @@ export default function WorldMap() {
           onMouseLeave={handleMouseLeave}
           style={{
             cursor: "pointer",
-            transition: "filter 0.3s ease",
-            filter:
-              hoveredCountry?.id === "AF"
-                ? "brightness(1.2) drop-shadow(0 0 4px rgba(0,0,0,0.5))"
-                : "none",
+            transition: "all 0.3s ease",
+            stroke: hoveredCountry?.id === "AF" ? "#444" : "black",
+            strokeWidth: hoveredCountry?.id === "AF" ? 0.5 : 0.2,
           }}
         />
       </svg>
