@@ -118,7 +118,7 @@ export default function WorldMap() {
                   height="1"
                 >
                   <image
-                    src={`${process.env.PUBLIC_URL}/images/${image}`}
+                    href={`${process.env.PUBLIC_URL}/images/${image}`}
                     width="100"
                     height="100"
                     preserveAspectRatio="xMidYMid slice"
