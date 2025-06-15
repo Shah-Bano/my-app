@@ -98,19 +98,17 @@ export default function WorldMap() {
               <pattern
                 key={id}
                 id={`${id}Pattern`}
-                patternUnits="userSpaceOnUse"
-                width="100"
-                height="100"
+                patternUnits="objectBoundingBox"
+                width="1"
+                height="1"
               >
                 <image
                   href={`${process.env.PUBLIC_URL}/images/${image}`}
-                  x="0"
-                  y="0"
-                  width="100"
-                  height="100"
+                  width="1"
+                  height="1"
+                  preserveAspectRatio="xMidYMid slice"
                 />
               </pattern>
-
 
               ))}
             </defs>
