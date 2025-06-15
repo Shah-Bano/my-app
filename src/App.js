@@ -34,25 +34,24 @@ const countryPaths = {
   AF: "M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z"
 };
 
+// Add your highlighted countries here (Africa, Europe, Asia)
+const highlightedCountryIds = new Set([
+  "CN", "GB", "BE", "FR", "LB", "PS", "SA", "YE", "PK", "IN", "EG", "IR", "TR", "AF"
+]);
+
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseEnter = (id, name) => {
-    setHoveredCountry({ id, name });
-  };
-
+  const handleMouseEnter = (id, name) => setHoveredCountry({ id, name });
   const handleMouseLeave = () => setHoveredCountry(null);
-
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
-
-  const handleCountryClick = (id, name) => {
+  const handleCountryClick = (id, name) =>
     setSelectedCountry(selectedCountry?.id === id ? null : { id, name });
-  };
 
   return (
     <div className="w-full bg-gradient-to-b from-blue-50 to-blue-100 p-4 rounded-lg">
@@ -89,54 +88,61 @@ export default function WorldMap() {
             className="border border-gray-200"
           >
             <defs>
+              {/* Background Gradient */}
               <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
                 <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
               </linearGradient>
 
+              {/* Grayscale Filter */}
+              <filter id="grayscale">
+                <feColorMatrix type="saturate" values="0" />
+              </filter>
+
+              {/* Patterns for countries */}
               {countries.map(({ id, image }) => (
-              <pattern
-                key={id}
-                id={`${id}Pattern`}
-                patternUnits="userSpaceOnUse"  // Important: use userSpaceOnUse for repeating
-                width="100"                    // width of one tile in px
-                height="100"                   // height of one tile in px
-              >
-                <image
-                  href={`${process.env.PUBLIC_URL}/images/${image}`}
-                  width="100"
-                  height="100"
-                  preserveAspectRatio="xMidYMid slice"
-                />
-              </pattern>
-
-
+                <pattern
+                  key={id}
+                  id={`${id}Pattern`}
+                  patternUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <image
+                    href={`/images/${image}`}
+                    width="100"
+                    height="100"
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </pattern>
               ))}
             </defs>
 
             {/* Ocean background */}
             <rect width="2000" height="857" fill="url(#oceanGradient)" />
 
-     
-
-            {/* Interactive countries */}
+            {/* Country Paths */}
             {countries.map(({ id, name }) => (
               <path
                 key={id}
                 id={id}
                 name={name}
                 d={countryPaths[id] || "M0,0"}
-                fill={`url(#${id}Pattern)`}
+                fill={
+                  highlightedCountryIds.has(id)
+                    ? `url(#${id}Pattern)`
+                    : "#d1d5db"
+                }
                 stroke="#374151"
                 strokeWidth={0.5}
                 onMouseEnter={() => handleMouseEnter(id, name)}
                 onMouseLeave={handleMouseLeave}
                 onClick={() => handleCountryClick(id, name)}
                 className={`cursor-pointer transition-all duration-300 ${
-                  hoveredCountry?.id === id ? 'pulsing' : ''
-                } ${selectedCountry?.id === id ? 'selected' : ''}`}
+                  hoveredCountry?.id === id ? "pulsing" : ""
+                } ${selectedCountry?.id === id ? "selected" : ""}`}
                 style={{
-                  stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
+                  stroke: hoveredCountry?.id === id ? "#3b82f6" : "#374151",
                   strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
                 }}
               />
@@ -165,3 +171,134 @@ export default function WorldMap() {
     </div>
   );
 }
+// export default function WorldMap() {
+//   const [hoveredCountry, setHoveredCountry] = useState(null);
+//   const [selectedCountry, setSelectedCountry] = useState(null);
+//   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+//   const handleMouseEnter = (id, name) => {
+//     setHoveredCountry({ id, name });
+//   };
+
+//   const handleMouseLeave = () => setHoveredCountry(null);
+
+//   const handleMouseMove = (e) => {
+//     const rect = e.currentTarget.getBoundingClientRect();
+//     setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+//   };
+
+//   const handleCountryClick = (id, name) => {
+//     setSelectedCountry(selectedCountry?.id === id ? null : { id, name });
+//   };
+
+//   return (
+//     <div className="w-full bg-gradient-to-b from-blue-50 to-blue-100 p-4 rounded-lg">
+//       <style>{`
+//         @keyframes pulse {
+//           0% { transform: scale(1); opacity: 1; }
+//           50% { transform: scale(1.05); opacity: 0.8; }
+//           100% { transform: scale(1); opacity: 1; }
+//         }
+//         .pulsing {
+//           animation: pulse 1.5s infinite ease-in-out;
+//           transform-box: fill-box;
+//           transform-origin: center;
+//           filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+//         }
+//         .selected {
+//           filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.8));
+//           stroke: #22c55e !important;
+//           stroke-width: 1.5 !important;
+//         }
+//       `}</style>
+
+//       <div
+//         className="relative bg-white rounded-lg shadow-lg overflow-hidden"
+//         onMouseMove={handleMouseMove}
+//       >
+//         <div className="w-full" style={{ aspectRatio: "2.33 / 1" }}>
+//           <svg
+//             viewBox="0 0 2000 857"
+//             preserveAspectRatio="xMidYMid meet"
+//             width="100%"
+//             height="100%"
+//             xmlns="http://www.w3.org/2000/svg"
+//             className="border border-gray-200"
+//           >
+//             <defs>
+//               <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+//                 <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
+//                 <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
+//               </linearGradient>
+
+//               {countries.map(({ id, image }) => (
+//               <pattern
+//                 key={id}
+//                 id={`${id}Pattern`}
+//                 patternUnits="userSpaceOnUse"  // Important: use userSpaceOnUse for repeating
+//                 width="100"                    // width of one tile in px
+//                 height="100"                   // height of one tile in px
+//               >
+//                 <image
+//                   href={`${process.env.PUBLIC_URL}/images/${image}`}
+//                   width="100"
+//                   height="100"
+//                   preserveAspectRatio="xMidYMid slice"
+//                 />
+//               </pattern>
+
+
+//               ))}
+//             </defs>
+
+//             {/* Ocean background */}
+//             <rect width="2000" height="857" fill="url(#oceanGradient)" />
+
+     
+
+//             {/* Interactive countries */}
+//             {countries.map(({ id, name }) => (
+//               <path
+//                 key={id}
+//                 id={id}
+//                 name={name}
+//                 d={countryPaths[id] || "M0,0"}
+//                 fill={`url(#${id}Pattern)`}
+//                 stroke="#374151"
+//                 strokeWidth={0.5}
+//                 onMouseEnter={() => handleMouseEnter(id, name)}
+//                 onMouseLeave={handleMouseLeave}
+//                 onClick={() => handleCountryClick(id, name)}
+//                 className={`cursor-pointer transition-all duration-300 ${
+//                   hoveredCountry?.id === id ? 'pulsing' : ''
+//                 } ${selectedCountry?.id === id ? 'selected' : ''}`}
+//                 style={{
+//                   stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
+//                   strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
+//                 }}
+//               />
+//             ))}
+//           </svg>
+//         </div>
+
+//         {/* Hover Tooltip */}
+//         {hoveredCountry && (
+//           <div
+//             className="absolute bg-white border border-gray-300 rounded-lg shadow-lg p-3 pointer-events-none z-10 max-w-xs"
+//             style={{
+//               top: Math.min(mousePosition.y + 10, window.innerHeight - 200),
+//               left: Math.min(mousePosition.x + 10, window.innerWidth - 200),
+//             }}
+//           >
+//             <div className="font-bold text-lg text-gray-800 mb-2">
+//               {hoveredCountry.name}
+//             </div>
+//             <div className="text-sm text-gray-600">
+//               Click to view more about this country's cuisine.
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
