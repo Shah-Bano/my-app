@@ -115,17 +115,7 @@ export default function WorldMap() {
             {/* Ocean background */}
             <rect width="2000" height="857" fill="url(#oceanGradient)" />
 
-            {/* Gray countries (non-interactive) */}
-            {grayCountries.map((country, index) => (
-              <path
-                key={`gray-${index}`}
-                d={country.d}
-                fill="#e5e7eb"
-                stroke="#d1d5db"
-                strokeWidth="0.5"
-                opacity="0.7"
-              />
-            ))}
+     
 
             {/* Interactive countries */}
             {countries.map(({ id, name }) => (
