@@ -95,20 +95,22 @@ export default function WorldMap() {
               </linearGradient>
 
               {countries.map(({ id, image }) => (
-                <pattern
-                  key={id}
-                  id={`${id}Pattern`}
-                  patternUnits="objectBoundingBox"
-                  width="1"
-                  height="1"
-                >
-                  <image
-                    href={`${process.env.PUBLIC_URL}/images/${image}`}
-                    width="100"
-                    height="100"
-                    preserveAspectRatio="xMidYMid slice" // or "meet" if you prefer
-                  />
-                </pattern>
+              <pattern
+                key={id}
+                id={`${id}Pattern`}
+                patternUnits="objectBoundingBox"
+                width="1"
+                height="1"
+              >
+                <image
+                  href={`${process.env.PUBLIC_URL}/images/${image}`}
+                  x="-25"
+                  y="-25"
+                  width="150"
+                  height="150"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              </pattern>
 
               ))}
             </defs>
