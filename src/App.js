@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 
 const countries = [
-  { id: "CN", name: "China", image: "1.png" },
-  { id: "GB", name: "Britain", image: "2.png" },
-  { id: "BE", name: "Belgium", image: "3.png" },
-  { id: "FR", name: "France", image: "4.png" },
-  { id: "LB", name: "Lebanon", image: "5.png" },
-  { id: "PS", name: "Palestine", image: "6.png" },
-  { id: "SA", name: "Saudi Arabia", image: "7.png" },
-  { id: "YE", name: "Yemen", image: "8.png" },
-  { id: "PK", name: "Pakistan", image: "14.jpg" },
-  { id: "IN", name: "India", image: "10.png" },
-  { id: "EG", name: "Egypt", image: "11.png" },
-  { id: "IR", name: "Iran", image: "12.png" },
-  { id: "TR", name: "Turkey", image: "13.png" },
-  { id: "AF", name: "Afghanistan", image: "9.png" },
+  { id: "CN", name: "China", image: "/images/1.png" },
+  { id: "GB", name: "Britain", image: "/images/2.png" },
+  { id: "BE", name: "Belgium", image: "/images/3.png" },
+  { id: "FR", name: "France", image: "/images/4.png" },
+  { id: "LB", name: "Lebanon", image: "/images/5.png" },
+  { id: "PS", name: "Palestine", image: "/images/6.png" },
+  { id: "SA", name: "Saudi Arabia", image: "/images/7.png" },
+  { id: "YE", name: "Yemen", image: "/images/8.png" },
+  { id: "PK", name: "Pakistan", image: "/images/14.jpg" },
+  { id: "IN", name: "India", image: "/images/10.png" },
+  { id: "EG", name: "Egypt", image: "/images/11.png" },
+  { id: "IR", name: "Iran", image: "/images/12.png" },
+  { id: "TR", name: "Turkey", image: "/images/13.png" },
+  { id: "AF", name: "Afghanistan", image: "/images/9.png" },
 ];
 
 const countryPaths = {
