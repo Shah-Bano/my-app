@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 const countries = [
-  { id: "CN", name: "China", image: "/images/1.png" },
-  { id: "GB", name: "Britain", image: "/images/2.png" },
-  { id: "BE", name: "Belgium", image: "/images/3.png" },
+  { id: "CN", name: "China", image: "/1.png" },
+  { id: "GB", name: "Britain", image: "/2.png" },
+  { id: "BE", name: "Belgium", image: "/3.png" },
   { id: "FR", name: "France", image: "/images/4.png" },
   { id: "LB", name: "Lebanon", image: "/images/5.png" },
   { id: "PS", name: "Palestine", image: "/images/6.png" },
