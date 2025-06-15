@@ -9,12 +9,12 @@ const countries = [
   { id: "PS", name: "Palestine", image: "6.png" },
   { id: "SA", name: "Saudi Arabia", image: "7.png" },
   { id: "YE", name: "Yemen", image: "8.png" },
-  { id: "PK", name: "Pakistan", image: "9.png" },
+  { id: "PK", name: "Pakistan", image: "14.jpg" },
   { id: "IN", name: "India", image: "10.png" },
   { id: "EG", name: "Egypt", image: "11.png" },
   { id: "IR", name: "Iran", image: "12.png" },
   { id: "TR", name: "Turkey", image: "13.png" },
-  { id: "AF", name: "Afghanistan", image: "14.png" },
+  { id: "AF", name: "Afghanistan", image: "9.png" },
 ];
 
 const countryPaths = {
@@ -34,33 +34,6 @@ const countryPaths = {
   AF: "M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z"
 };
 
-// Gray outline countries (non-interactive)
-const grayCountries = [
-  // Europe
-  { d: "M950 140L1080 155L1070 180L940 170Z", name: "Germany" },
-  { d: "M1080 160L1130 165L1120 190L1070 180Z", name: "Poland" },
-  { d: "M900 180L1010 185L1000 210L890 200Z", name: "Spain" },
-  { d: "M1020 200L1080 205L1070 230L1010 220Z", name: "Italy" },
-  { d: "M960 130L1020 145L1010 170L950 160Z", name: "Netherlands" },
-  
-  // Asia  
-  { d: "M1500 150L1700 210L1680 250L1480 190Z", name: "Russia" },
-  { d: "M1550 280L1650 310L1640 340L1540 310Z", name: "Mongolia" },
-  { d: "M1300 250L1380 260L1370 290L1290 280Z", name: "Kazakhstan" },
-  { d: "M1200 280L1300 290L1290 320L1190 310Z", name: "Iraq" },
-  { d: "M1150 320L1240 330L1230 360L1140 350Z", name: "Jordan" },
-  
-  // Other continents
-  { d: "M200 200L400 220L380 320L180 300Z", name: "United States" },
-  { d: "M300 450L500 470L480 570L280 550Z", name: "Brazil" },
-  { d: "M1600 450L1750 470L1730 550L1580 530Z", name: "Australia" },
-  { d: "M1050 450L1150 470L1130 550L1030 530Z", name: "South Africa" },
-  { d: "M100 350L200 370L180 450L80 430Z", name: "Mexico" },
-  { d: "M50 150L180 170L160 250L30 230Z", name: "Canada" },
-];
-
-
-
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -70,9 +43,7 @@ export default function WorldMap() {
     setHoveredCountry({ id, name });
   };
 
-  const handleMouseLeave = () => {
-    setHoveredCountry(null);
-  };
+  const handleMouseLeave = () => setHoveredCountry(null);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -104,84 +75,84 @@ export default function WorldMap() {
         }
       `}</style>
 
-    
-
-      <div 
+      <div
         className="relative bg-white rounded-lg shadow-lg overflow-hidden"
         onMouseMove={handleMouseMove}
       >
-        <svg
-          viewBox="0 0 2000 857"
-          width="100%"
-          height="auto"
-          xmlns="http://www.w3.org/2000/svg"
-          className="border border-gray-200"
-        >
-          <defs>
-            <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
-            </linearGradient>
-            
-            {countries.map(({ id }) => (
-              <pattern
-                key={id}
-                id={`${id}Pattern`}
-                patternUnits="userSpaceOnUse"
-                width="100"
-                height="100"
-              >
-                <rect width="100" height="100" fill="#f3f4f6" />
-                <circle cx="50" cy="50" r="30" fill="#3b82f6" opacity="0.7" />
-                <text x="50" y="55" textAnchor="middle" fontSize="12" fill="white" fontWeight="bold">
-                  {id}
-                </text>
-              </pattern>
+        <div className="w-full" style={{ aspectRatio: "2.33 / 1" }}>
+          <svg
+            viewBox="0 0 2000 857"
+            preserveAspectRatio="xMidYMid meet"
+            width="100%"
+            height="100%"
+            xmlns="http://www.w3.org/2000/svg"
+            className="border border-gray-200"
+          >
+            <defs>
+              <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
+              </linearGradient>
+
+              {countries.map(({ id, image }) => (
+                <pattern
+                  key={id}
+                  id={`${id}Pattern`}
+                  patternUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <image
+                    href={`/${image}`}
+                    width="100"
+                    height="100"
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </pattern>
+              ))}
+            </defs>
+
+            {/* Ocean background */}
+            <rect width="2000" height="857" fill="url(#oceanGradient)" />
+
+            {/* Gray countries (non-interactive) */}
+            {grayCountries.map((country, index) => (
+              <path
+                key={`gray-${index}`}
+                d={country.d}
+                fill="#e5e7eb"
+                stroke="#d1d5db"
+                strokeWidth="0.5"
+                opacity="0.7"
+              />
             ))}
-          </defs>
 
-          {/* Ocean background */}
-          <rect width="2000" height="857" fill="url(#oceanGradient)" />
+            {/* Interactive countries */}
+            {countries.map(({ id, name }) => (
+              <path
+                key={id}
+                id={id}
+                name={name}
+                d={countryPaths[id] || "M0,0"}
+                fill={`url(#${id}Pattern)`}
+                stroke="#374151"
+                strokeWidth={0.5}
+                onMouseEnter={() => handleMouseEnter(id, name)}
+                onMouseLeave={handleMouseLeave}
+                onClick={() => handleCountryClick(id, name)}
+                className={`cursor-pointer transition-all duration-300 ${
+                  hoveredCountry?.id === id ? 'pulsing' : ''
+                } ${selectedCountry?.id === id ? 'selected' : ''}`}
+                style={{
+                  stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
+                  strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
+                }}
+              />
+            ))}
+          </svg>
+        </div>
 
-          {/* Gray countries (non-interactive background) */}
-          {grayCountries.map((country, index) => (
-            <path
-              key={`gray-${index}`}
-              d={country.d}
-              fill="#e5e7eb"
-              stroke="#d1d5db"
-              strokeWidth="0.5"
-              opacity="0.7"
-            />
-          ))}
-
-          {/* Interactive countries */}
-          {countries.map(({ id, name }) => (
-            <path
-              key={id}
-              id={id}
-              name={name}
-              d={countryPaths[id] || "M0,0"}
-              fill={`url(#${id}Pattern)`}
-              stroke="#374151"
-              strokeWidth={0.5}
-              onMouseEnter={() => handleMouseEnter(id, name)}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => handleCountryClick(id, name)}
-              className={`
-                cursor-pointer transition-all duration-300
-                ${hoveredCountry?.id === id ? 'pulsing' : ''}
-                ${selectedCountry?.id === id ? 'selected' : ''}
-              `}
-              style={{
-                stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
-                strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
-              }}
-            />
-          ))}
-        </svg>
-
-        {/* Hover tooltip */}
+        {/* Hover Tooltip */}
         {hoveredCountry && (
           <div
             className="absolute bg-white border border-gray-300 rounded-lg shadow-lg p-3 pointer-events-none z-10 max-w-xs"
@@ -193,14 +164,182 @@ export default function WorldMap() {
             <div className="font-bold text-lg text-gray-800 mb-2">
               {hoveredCountry.name}
             </div>
-            
+            <div className="text-sm text-gray-600">
+              Click to view more about this country's cuisine.
+            </div>
           </div>
         )}
       </div>
+    </div>
+  );
+}
+// Gray outline countries (non-interactive)
+// const grayCountries = [
+//   // Europe
+//   { d: "M950 140L1080 155L1070 180L940 170Z", name: "Germany" },
+//   { d: "M1080 160L1130 165L1120 190L1070 180Z", name: "Poland" },
+//   { d: "M900 180L1010 185L1000 210L890 200Z", name: "Spain" },
+//   { d: "M1020 200L1080 205L1070 230L1010 220Z", name: "Italy" },
+//   { d: "M960 130L1020 145L1010 170L950 160Z", name: "Netherlands" },
+  
+//   // Asia  
+//   { d: "M1500 150L1700 210L1680 250L1480 190Z", name: "Russia" },
+//   { d: "M1550 280L1650 310L1640 340L1540 310Z", name: "Mongolia" },
+//   { d: "M1300 250L1380 260L1370 290L1290 280Z", name: "Kazakhstan" },
+//   { d: "M1200 280L1300 290L1290 320L1190 310Z", name: "Iraq" },
+//   { d: "M1150 320L1240 330L1230 360L1140 350Z", name: "Jordan" },
+  
+//   // Other continents
+//   { d: "M200 200L400 220L380 320L180 300Z", name: "United States" },
+//   { d: "M300 450L500 470L480 570L280 550Z", name: "Brazil" },
+//   { d: "M1600 450L1750 470L1730 550L1580 530Z", name: "Australia" },
+//   { d: "M1050 450L1150 470L1130 550L1030 530Z", name: "South Africa" },
+//   { d: "M100 350L200 370L180 450L80 430Z", name: "Mexico" },
+//   { d: "M50 150L180 170L160 250L30 230Z", name: "Canada" },
+// ];
+
+
+
+// export default function WorldMap() {
+//   const [hoveredCountry, setHoveredCountry] = useState(null);
+//   const [selectedCountry, setSelectedCountry] = useState(null);
+//   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+//   const handleMouseEnter = (id, name) => {
+//     setHoveredCountry({ id, name });
+//   };
+
+//   const handleMouseLeave = () => {
+//     setHoveredCountry(null);
+//   };
+
+//   const handleMouseMove = (e) => {
+//     const rect = e.currentTarget.getBoundingClientRect();
+//     setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+//   };
+
+//   const handleCountryClick = (id, name) => {
+//     setSelectedCountry(selectedCountry?.id === id ? null : { id, name });
+//   };
+
+//   return (
+//     <div className="w-full bg-gradient-to-b from-blue-50 to-blue-100 p-4 rounded-lg">
+//       <style>{`
+//         @keyframes pulse {
+//           0% { transform: scale(1); opacity: 1; }
+//           50% { transform: scale(1.05); opacity: 0.8; }
+//           100% { transform: scale(1); opacity: 1; }
+//         }
+//         .pulsing {
+//           animation: pulse 1.5s infinite ease-in-out;
+//           transform-box: fill-box;
+//           transform-origin: center;
+//           filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+//         }
+//         .selected {
+//           filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.8));
+//           stroke: #22c55e !important;
+//           stroke-width: 1.5 !important;
+//         }
+//       `}</style>
+
+    
+
+//       <div 
+//         className="relative bg-white rounded-lg shadow-lg overflow-hidden"
+//         onMouseMove={handleMouseMove}
+//       >
+//         <svg
+//           viewBox="0 0 2000 857"
+//           width="100%"
+//           height="auto"
+//           xmlns="http://www.w3.org/2000/svg"
+//           className="border border-gray-200"
+//         >
+//           <defs>
+//             <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+//               <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
+//               <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
+//             </linearGradient>
+            
+//             {countries.map(({ id }) => (
+//               <pattern
+//                 key={id}
+//                 id={`${id}Pattern`}
+//                 patternUnits="userSpaceOnUse"
+//                 width="100"
+//                 height="100"
+//               >
+//                 <rect width="100" height="100" fill="#f3f4f6" />
+//                 <circle cx="50" cy="50" r="30" fill="#3b82f6" opacity="0.7" />
+//                 <text x="50" y="55" textAnchor="middle" fontSize="12" fill="white" fontWeight="bold">
+//                   {id}
+//                 </text>
+//               </pattern>
+//             ))}
+//           </defs>
+
+//           {/* Ocean background */}
+//           <rect width="2000" height="857" fill="url(#oceanGradient)" />
+
+//           {/* Gray countries (non-interactive background) */}
+//           {grayCountries.map((country, index) => (
+//             <path
+//               key={`gray-${index}`}
+//               d={country.d}
+//               fill="#e5e7eb"
+//               stroke="#d1d5db"
+//               strokeWidth="0.5"
+//               opacity="0.7"
+//             />
+//           ))}
+
+//           {/* Interactive countries */}
+//           {countries.map(({ id, name }) => (
+//             <path
+//               key={id}
+//               id={id}
+//               name={name}
+//               d={countryPaths[id] || "M0,0"}
+//               fill={`url(#${id}Pattern)`}
+//               stroke="#374151"
+//               strokeWidth={0.5}
+//               onMouseEnter={() => handleMouseEnter(id, name)}
+//               onMouseLeave={handleMouseLeave}
+//               onClick={() => handleCountryClick(id, name)}
+//               className={`
+//                 cursor-pointer transition-all duration-300
+//                 ${hoveredCountry?.id === id ? 'pulsing' : ''}
+//                 ${selectedCountry?.id === id ? 'selected' : ''}
+//               `}
+//               style={{
+//                 stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
+//                 strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
+//               }}
+//             />
+//           ))}
+//         </svg>
+
+//         {/* Hover tooltip */}
+//         {hoveredCountry && (
+//           <div
+//             className="absolute bg-white border border-gray-300 rounded-lg shadow-lg p-3 pointer-events-none z-10 max-w-xs"
+//             style={{
+//               top: Math.min(mousePosition.y + 10, window.innerHeight - 200),
+//               left: Math.min(mousePosition.x + 10, window.innerWidth - 200),
+//             }}
+//           >
+//             <div className="font-bold text-lg text-gray-800 mb-2">
+//               {hoveredCountry.name}
+//             </div>
+            
+//           </div>
+//         )}
+//       </div>
 
 
 
      
-    </div>
-  );
-}
+//     </div>
+//   );
+// }
