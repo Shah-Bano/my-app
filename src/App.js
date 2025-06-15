@@ -34,24 +34,40 @@ const countryPaths = {
   AF: "M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z"
 };
 
-// Add your highlighted countries here (Africa, Europe, Asia)
-const highlightedCountryIds = new Set([
-  "CN", "GB", "BE", "FR", "LB", "PS", "SA", "YE", "PK", "IN", "EG", "IR", "TR", "AF"
-]);
+const highlightedCountries = new Set(countries.map(c => c.id));
 
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseEnter = (id, name) => setHoveredCountry({ id, name });
+  // Greys out non-highlighted countries in the SVG after it loads
+  useEffect(() => {
+    const allPaths = document.querySelectorAll("svg path");
+    allPaths.forEach((path) => {
+      const id = path.getAttribute("id");
+      if (!highlightedCountries.has(id)) {
+        path.setAttribute("fill", "#d1d5db"); // Tailwind's gray-300
+        path.setAttribute("stroke", "#9ca3af"); // Tailwind's gray-400
+        path.classList.remove("cursor-pointer");
+      }
+    });
+  }, []);
+
+  const handleMouseEnter = (id, name) => {
+    setHoveredCountry({ id, name });
+  };
+
   const handleMouseLeave = () => setHoveredCountry(null);
+
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
-  const handleCountryClick = (id, name) =>
+
+  const handleCountryClick = (id, name) => {
     setSelectedCountry(selectedCountry?.id === id ? null : { id, name });
+  };
 
   return (
     <div className="w-full bg-gradient-to-b from-blue-50 to-blue-100 p-4 rounded-lg">
@@ -88,18 +104,11 @@ export default function WorldMap() {
             className="border border-gray-200"
           >
             <defs>
-              {/* Background Gradient */}
               <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style={{ stopColor: '#bfdbfe', stopOpacity: 1 }} />
                 <stop offset="100%" style={{ stopColor: '#dbeafe', stopOpacity: 1 }} />
               </linearGradient>
 
-              {/* Grayscale Filter */}
-              <filter id="grayscale">
-                <feColorMatrix type="saturate" values="0" />
-              </filter>
-
-              {/* Patterns for countries */}
               {countries.map(({ id, image }) => (
                 <pattern
                   key={id}
@@ -121,28 +130,24 @@ export default function WorldMap() {
             {/* Ocean background */}
             <rect width="2000" height="857" fill="url(#oceanGradient)" />
 
-            {/* Country Paths */}
+            {/* Highlighted countries only */}
             {countries.map(({ id, name }) => (
               <path
                 key={id}
                 id={id}
                 name={name}
                 d={countryPaths[id] || "M0,0"}
-                fill={
-                  highlightedCountryIds.has(id)
-                    ? `url(#${id}Pattern)`
-                    : "#d1d5db"
-                }
+                fill={`url(#${id}Pattern)`}
                 stroke="#374151"
                 strokeWidth={0.5}
                 onMouseEnter={() => handleMouseEnter(id, name)}
                 onMouseLeave={handleMouseLeave}
                 onClick={() => handleCountryClick(id, name)}
                 className={`cursor-pointer transition-all duration-300 ${
-                  hoveredCountry?.id === id ? "pulsing" : ""
-                } ${selectedCountry?.id === id ? "selected" : ""}`}
+                  hoveredCountry?.id === id ? 'pulsing' : ''
+                } ${selectedCountry?.id === id ? 'selected' : ''}`}
                 style={{
-                  stroke: hoveredCountry?.id === id ? "#3b82f6" : "#374151",
+                  stroke: hoveredCountry?.id === id ? '#3b82f6' : '#374151',
                   strokeWidth: hoveredCountry?.id === id ? 1 : 0.5,
                 }}
               />
@@ -150,7 +155,7 @@ export default function WorldMap() {
           </svg>
         </div>
 
-        {/* Hover Tooltip */}
+        {/* Tooltip on hover */}
         {hoveredCountry && (
           <div
             className="absolute bg-white border border-gray-300 rounded-lg shadow-lg p-3 pointer-events-none z-10 max-w-xs"
