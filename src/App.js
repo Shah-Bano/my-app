@@ -103,7 +103,7 @@ export default function WorldMap() {
                   height="1"
                 >
                   <image
-                    href={`/${image}`}
+                    href={`/images/${image}`}  // include the folder name here
                     width="100"
                     height="100"
                     preserveAspectRatio="xMidYMid slice"
